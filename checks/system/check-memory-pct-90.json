@@ -1,0 +1,11 @@
+{
+  "checks": {
+    "check-memory-pct-90": {
+      "handlers": ["default"],
+      "command": "sh /etc/sensu/plugins/system/check-memory-pcnt/check-memory-pcnt.sh -w 88 -c 90",
+      "interval": 60,
+      "occurrences": 5,
+        "subscribers": [ "all" ]
+    }
+  }
+}
