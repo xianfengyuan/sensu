@@ -2,6 +2,7 @@ require 'rubygems' if RUBY_VERSION < '1.9.0'
 require 'sensu-plugin/check/cli'
 require 'elasticsearch'
 require 'json'
+require 'resolv'
 
 class ESHeap < Sensu::Plugin::Check::CLI
 
@@ -16,12 +17,6 @@ class ESHeap < Sensu::Plugin::Check::CLI
     :short => '-p PORT',
     :long => '--port PORT',
     :default => '9200'
-
-  option :node,
-    :description => 'Elasticsearch node',
-    :short => '-n NODE',
-    :long => '--node NODE',
-    :default => '172.17.0.104'
 
   option :warn,
     :short => '-w N',
@@ -47,7 +42,8 @@ class ESHeap < Sensu::Plugin::Check::CLI
 
   def get_heap_used_in_percentage
     begin
-      response = elasticsearch_client.perform_request('GET', "_nodes/#{config[:node]}/stats")
+      node = Resolv.getaddress config[:server]
+      response = elasticsearch_client.perform_request('GET', "_nodes/#{node}/stats")
       heap_used_in_percentage = response.body["nodes"].values[0]["jvm"]["mem"]["heap_used_percent"]
       warning "Could not get heap usage" if heap_used_in_percentage.nil?
     rescue Exception => e
