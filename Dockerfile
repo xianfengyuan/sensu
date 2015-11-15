@@ -58,9 +58,9 @@ ADD ./files/filebeat.yml /etc/filebeat/
 RUN /opt/sensu/embedded/bin/gem install elasticsearch --no-rdoc --no-ri
 
 # sensu-client
-ADD ./files/client.json /etc/sensu/conf.d/
-ADD checks /etc/sensu/conf.d/checks
+ADD conf.d /etc/sensu/conf.d
 ADD plugins /etc/sensu/plugins
+ADD mutators /etc/sensu/mutators
 
 CMD ["/usr/bin/supervisord"]
 
