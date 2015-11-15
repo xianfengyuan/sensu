@@ -50,14 +50,17 @@ RUN /etc/init.d/sshd start && /etc/init.d/sshd stop
 
 EXPOSE 22 3000 4567 5671 15672
 
+# filebeat
+RUN rpm -Uvh https://download.elastic.co/beats/filebeat/filebeat-1.0.0-rc1-x86_64.rpm
+ADD ./files/filebeat.yml /etc/filebeat/
+
+# elasticsearch gem
+RUN /opt/sensu/embedded/bin/gem install elasticsearch --no-rdoc --no-ri
+
 # sensu-client
 ADD ./files/client.json /etc/sensu/conf.d/
 ADD checks /etc/sensu/conf.d/checks
 ADD plugins /etc/sensu/plugins
-
-# filebeat
-RUN rpm -Uvh https://download.elastic.co/beats/filebeat/filebeat-1.0.0-rc1-x86_64.rpm
-ADD ./files/filebeat.yml /etc/filebeat/
 
 CMD ["/usr/bin/supervisord"]
 

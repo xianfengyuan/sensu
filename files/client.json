@@ -5,6 +5,7 @@
     "subscriptions": [
       "all",
       "common",
+      "sensu",
       "web"
     ]
   },
