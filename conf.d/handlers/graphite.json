@@ -1,7 +1,12 @@
 {
-  "mutators": {
+  "handlers": {
     "graphite": {
-      "command": "/opt/sensu/embedded/bin/ruby /etc/sensu/mutators/graphite/graphite.rb"
+      "type": "tcp",
+      "socket": {
+        "host": "gs",
+        "port": 2003
+      },
+      "mutator": "graphite"
     }
   }
 }
