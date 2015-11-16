@@ -54,13 +54,17 @@ EXPOSE 22 3000 4567 5671 15672
 RUN rpm -Uvh https://download.elastic.co/beats/filebeat/filebeat-1.0.0-rc1-x86_64.rpm
 ADD ./files/filebeat.yml /etc/filebeat/
 
-# elasticsearch gem
-RUN /opt/sensu/embedded/bin/gem install elasticsearch --no-rdoc --no-ri
-
+# gems
+RUN /opt/sensu/embedded/bin/gem install elasticsearch --no-rdoc --no-ri \
+  && /opt/sensu/embedded/bin/gem install mail --no-rdoc --no-ri \
+  && /opt/sensu/embedded/bin/gem install timeout --no-rdoc --no-ri \
+  && /opt/sensu/embedded/bin/gem install erubis --no-rdoc --no-ri
+    
 # sensu-client
 ADD conf.d /etc/sensu/conf.d
 ADD plugins /etc/sensu/plugins
 ADD mutators /etc/sensu/mutators
+ADD handlers /etc/sensu/handlers
 
 CMD ["/usr/bin/supervisord"]
 
